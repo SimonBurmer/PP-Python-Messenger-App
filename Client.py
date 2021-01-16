@@ -17,7 +17,6 @@ def receive():
         except OSError:  # Possibly client has left the chat.
             break
 
-
 def send(event=None):  # event is passed by tk binders.
     """Handles sending of messages."""
     msg = my_message.get() # Gets message from input field.
@@ -25,8 +24,7 @@ def send(event=None):  # event is passed by tk binders.
     client_socket.send(bytes(msg, "utf8")) # Sends message to server.
     if msg == "{quit}":
         client_socket.close()
-        top.destroy()
-
+        client_GUI.destroy()
 
 def on_closing(event=None):
     """This function is to be called when the window is closed."""
@@ -34,18 +32,17 @@ def on_closing(event=None):
         my_message.set("{quit}")
         send()
     else:
-        top.destroy()
+        client_GUI.destroy()
         sys.exit()
 
 
 #----------GUI---------
-top = tkinter.Tk()
-top.title("Simons Messenger")
-
-messages_frame = tkinter.Frame(top)
+client_GUI = tkinter.Tk()
+client_GUI.title("Simons Messenger")
+messages_frame = tkinter.Frame(client_GUI)
 my_message = tkinter.StringVar()  # For the messages to be sent.
 my_message.set("Type your messages here.")
-scrollbar = tkinter.Scrollbar(messages_frame)  # To navigate through past messages.
+scrollbar = tkinter.Scrollbar(messages_frame) # To navigate through past messages.
 
 messages_list = tkinter.Listbox(messages_frame, height=15, width=50, yscrollcommand=scrollbar.set)
 scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
@@ -53,13 +50,13 @@ messages_list.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
 messages_list.pack()
 messages_frame.pack()
 
-entry_field = tkinter.Entry(top, textvariable=my_message)
+entry_field = tkinter.Entry(client_GUI, textvariable=my_message)
 entry_field.bind("<Return>", send)
 entry_field.pack()
-send_button = tkinter.Button(top, text="Send", command=send)
+send_button = tkinter.Button(client_GUI, text="Send", command=send)
 send_button.pack()
 
-top.protocol("WM_DELETE_WINDOW", on_closing)
+client_GUI.protocol("WM_DELETE_WINDOW", on_closing)
 
 
 #----Now comes the sockets part----
