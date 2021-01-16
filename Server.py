@@ -1,4 +1,7 @@
-"""Server for multithreaded (asynchronous) chat application."""
+""" 
+Server for multithreaded (asynchronous) chat application.
+https://realpython.com/python-sockets/
+"""
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
 
